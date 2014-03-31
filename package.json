@@ -1,0 +1,24 @@
+{
+  "name": "html-proxy",
+  "version": "0.0.1",
+  "description": "HTML fragment proxy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:dickeylth/html-proxy.git"
+  },
+  "keywords": [
+    "html",
+    "fragment",
+    "proxy"
+  ],
+  "author": "弘树",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dickeylth/html-proxy/issues"
+  },
+  "homepage": "https://github.com/dickeylth/html-proxy"
+}
