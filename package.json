@@ -1,10 +1,10 @@
 {
   "name": "html-proxy",
   "version": "0.0.1",
-  "description": "HTML fragment proxy",
+  "description": "html proxy for flexcombo",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test/index.js"
   },
   "repository": {
     "type": "git",
@@ -12,7 +12,7 @@
   },
   "keywords": [
     "html",
-    "fragment",
+    "replace",
     "proxy"
   ],
   "author": "弘树",
@@ -20,5 +20,11 @@
   "bugs": {
     "url": "https://github.com/dickeylth/html-proxy/issues"
   },
-  "homepage": "https://github.com/dickeylth/html-proxy"
+  "homepage": "https://github.com/dickeylth/html-proxy",
+  "dependencies": {
+    "cheerio": "^0.15.0",
+    "encoding": "^0.1.7",
+    "js-beautify": "^1.4.2",
+    "juicer": "^0.6.5-stable-p2"
+  }
 }
