@@ -220,9 +220,13 @@ HTMLProxy.prototype = {
                 config.path += (config.path.indexOf('?') > 0) ? '&' : '?' + 'reqUrl=' + reqUrl;
                 config.path += '&matchIdx=' + idx;
                 config.port = htmlProxyPort;
-                for (var key in request.headers) {
-                    config.headers[key] = request.headers[key];
-                }
+
+                // 拷贝请求头
+                var reqHeaders = request.headers,
+                    reqHeaderKeys = Object.keys(reqHeaders);
+                reqHeaderKeys.forEach(function(key){
+                    config.headers[key] = reqHeaders[key];
+                });
                 delete config.headers['accept-encoding'];
                 config.headers['accept'] = 'text/html,application/xhtml+xml,application/xml,*/*;';
 

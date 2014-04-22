@@ -15,7 +15,10 @@
     "replace",
     "proxy"
   ],
-  "author": "弘树",
+  "author": {
+      "name": "dickeylth",
+      "email": "tiehang.lth@taobao.com"
+  },
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/dickeylth/html-proxy/issues"
