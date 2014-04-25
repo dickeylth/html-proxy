@@ -9,8 +9,9 @@ var url = require('url');
 var fs = require('fs');
 
 var Juicer = require('juicer');
-var encoding = require('encoding');
+var iconv = require('iconv-lite');
 var cheerio = require('cheerio');
+var request = require('request');
 var beautify_html = require('js-beautify').html;
 
 var mock = require('./lib/mock');
@@ -73,95 +74,51 @@ HTMLProxy.prototype = {
                 var matchIdx = reqQuery.matchIdx,
                     options = url.parse(reqUrl, true);
 
-
                 // 带上原请求的所有请求头，重要的是 cookie，以同步服务器端会话
-                options.headers = req.headers;
+                //options.headers = req.headers;
 
-                http.request(options, function (response) {
+                request({
+                    url: reqUrl,
+                    headers: req.headers,
+                    encoding: null
+                }, function(error, response, body){
 
-                    var buffer = [];
-                    var responseHeaders = response.headers;
-                    var responseCharset = 'utf-8';
+                    if (!error && response.statusCode == 200) {
 
-                    // 检测是否响应体为 utf-8 编码，便于后面转码处理
-                    if (responseHeaders['content-type']) {
-                        var contentType = responseHeaders['content-type'],
-                            charsetMatch = contentType.match(/charset=(\w+)/ig);
+                        var responseCharset = 'utf-8',
+                            responseHeaders = response.headers;
 
-                        if (charsetMatch.length != 0) {
-                            responseCharset = charsetMatch[0].split('=')[1];
+                        // 检测是否响应体为 utf-8 编码，便于后面转码处理
+                        if (responseHeaders['content-type']) {
+                            var contentType = responseHeaders['content-type'],
+                                charsetMatch = contentType.match(/charset=([\w-]+)/ig);
+
+                            if (charsetMatch && (charsetMatch.length != 0)) {
+                                responseCharset = charsetMatch[0].split('=')[1];
+                            }
+
                         }
 
-                    }
-
-                    // 完整接受UTF-8格式的响应体之后的回调
-                    var sendCallback = function (retStr) {
-
+                        // 获取替换关系
                         var replacements = htmlProxyConfig[matchIdx].replacements;
-
-                        var replacedHTML = self.replaceDom(retStr.toString(), replacements);
-
-                        res.end(encoding.convert(replacedHTML, responseCharset));
-
-                    };
-
-                    // 如果服务器端有编码压缩
-                    if ('content-encoding' in responseHeaders) {
-
-                        console.log('Processing content-encoding ...');
-
-                        var removeHeaders = ['transfer-encoding', 'content-encoding'];
-                        removeHeaders.forEach(function (key) {
-                            delete responseHeaders[key];
-                        });
-                        res.writeHead(200, responseHeaders);
-
-                        var unzipper = zlib.createUnzip();
-                        response.pipe(unzipper);
-
-                        unzipper.on('data', function (data) {
-
-                            // 转为 utf-8 编码
-                            data = encoding.convert(data, 'utf8', responseCharset);
-
-                            // decompression chunk ready, add it to the buffer
-                            buffer.push(data.toString());
-
-                        }).on("end", function () {
-
-                            // response and decompression complete, join the buffer and return
-                            sendCallback(buffer.join(""));
-
-                        }).on("error", function (e) {
-
-                            log(500, reqUrl, e);
-
-                        });
+                        // 根据响应头指定的编码进行解码
+                        var pageContent = iconv.decode(body, responseCharset);
+                        // 替换相应区块的 html 片段
+                        var replacedHTML = self.replaceDom(pageContent, replacements);
+                        // html 美化，转回响应头指定的编码
+                        var encodedHTML = iconv.encode(beautify_html(replacedHTML), responseCharset);
+                        // 响应到浏览器
+                        res.end(encodedHTML);
 
                     } else {
 
-                        console.log('Processing plain output ...');
-
-                        var ret = '';
-                        response.on('data', function (data) {
-
-                            // 转为 utf-8 编码
-                            data = encoding.convert(data, 'utf8', responseCharset);
-                            ret += data;
-
-                        });
-                        response.on('end', function () {
-
-                            ret && sendCallback(ret);
-
-                        });
+                        console.log('failed to load remote page: ' + url);
 
                     }
 
+                });
 
-                }).end();
             }
-
 
         }).listen(self.port);
     },

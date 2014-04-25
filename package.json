@@ -1,6 +1,6 @@
 {
   "name": "html-proxy",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "html proxy for flexcombo",
   "main": "index.js",
   "scripts": {
@@ -16,8 +16,8 @@
     "proxy"
   ],
   "author": {
-      "name": "dickeylth",
-      "email": "tiehang.lth@taobao.com"
+    "name": "dickeylth",
+    "email": "tiehang.lth@taobao.com"
   },
   "license": "ISC",
   "bugs": {
@@ -26,8 +26,9 @@
   "homepage": "https://github.com/dickeylth/html-proxy",
   "dependencies": {
     "cheerio": "^0.15.0",
-    "encoding": "^0.1.7",
+    "iconv-lite": "^0.2.11",
     "js-beautify": "^1.4.2",
-    "juicer": "^0.6.5-stable-p2"
+    "juicer": "^0.6.5-stable-p2",
+    "request": "^2.34.0"
   }
 }
