@@ -18,7 +18,7 @@ var mock = require('./lib/mock');
 
 function HTMLProxy(config) {
     var self = this;
-    this.init(config);
+    self.init(config);
 }
 
 HTMLProxy.prototype = {
@@ -44,6 +44,7 @@ HTMLProxy.prototype = {
         self.htmlProxyRegUrls = htmlProxyRegUrls;
         self.htmlProxyConfig = htmlProxyConfig;
         self.port = options.htmlProxyPort || 8090;
+        self.matchUrl = {};
 
         if (options.needServer) {
             self.server = this.createServer();
@@ -71,7 +72,7 @@ HTMLProxy.prototype = {
 
             if (reqUrl) {
 
-                var matchIdx = reqQuery.matchIdx,
+                var matchIdx = self.matchUrl[reqUrl],
                     options = url.parse(reqUrl, true);
 
                 // 带上原请求的所有请求头，重要的是 cookie，以同步服务器端会话
@@ -175,8 +176,8 @@ HTMLProxy.prototype = {
 
                 config.host = 'localhost';
                 config.path += (config.path.indexOf('?') > 0) ? '&' : '?' + 'reqUrl=' + reqUrl;
-                config.path += '&matchIdx=' + idx;
                 config.port = htmlProxyPort;
+                self.matchUrl[reqUrl] = idx;
 
                 // 拷贝请求头
                 var reqHeaders = request.headers,
