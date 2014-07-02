@@ -67,5 +67,6 @@
 
 ### History
 
+- [0.0.6] 移除不太好用的 js-beautify 的格式化 html 功能
 - [0.0.5] Bugfix
 - [0.0.1] 初始功能
