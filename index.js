@@ -69,19 +69,16 @@ HTMLProxy.prototype = {
             console.log('HTMLProxy处理：' + req.url);
 
             var reqQuery = url.parse(req.url, true).query,
-                reqUrl = reqQuery.reqUrl;
+                reqUrl = decodeURIComponent(reqQuery.reqUrl);
 
             if (reqUrl) {
 
                 var matchIdx = self.matchUrl[reqUrl],
                     options = url.parse(reqUrl, true);
 
-                // 带上原请求的所有请求头，重要的是 cookie，以同步服务器端会话
-                //options.headers = req.headers;
-
                 request({
                     url: reqUrl,
-                    headers: req.headers,
+                    headers: req.headers,   // 带上原请求的所有请求头，重要的是 cookie，以同步服务器端会话
                     encoding: null
                 }, function(error, response, body){
 
@@ -115,6 +112,7 @@ HTMLProxy.prototype = {
                     } else {
 
                         console.log('failed to load remote page: ' + url);
+	                    console.error(error);
 
                     }
 
@@ -176,7 +174,7 @@ HTMLProxy.prototype = {
             if (urlReg.test(reqUrl)) {
 
                 config.host = 'localhost';
-                config.path += (config.path.indexOf('?') > 0) ? '&' : '?' + 'reqUrl=' + reqUrl;
+                config.path += ((config.path.indexOf('?') > 0) ? '&' : '?') + 'reqUrl=' + encodeURIComponent(reqUrl);
                 config.port = htmlProxyPort;
                 self.matchUrl[reqUrl] = idx;
 

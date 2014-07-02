@@ -64,3 +64,8 @@
     exportConfigForRProxy: function (request, config) {
         
     }
+
+### History
+
+- [0.0.5] Bugfix
+- [0.0.1] 初始功能
