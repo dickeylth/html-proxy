@@ -1,6 +1,6 @@
 {
   "name": "html-proxy",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "html proxy for flexcombo",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,6 @@
   "dependencies": {
     "cheerio": "^0.15.0",
     "iconv-lite": "^0.2.11",
-    "js-beautify": "^1.4.2",
     "juicer": "^0.6.5-stable-p2",
     "request": "^2.34.0"
   }

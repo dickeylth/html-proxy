@@ -13,7 +13,6 @@ var Juicer = require('juicer');
 var iconv = require('iconv-lite');
 var cheerio = require('cheerio');
 var request = require('request');
-var beautify_html = require('js-beautify').html;
 
 var mock = require('./lib/mock');
 
@@ -104,8 +103,8 @@ HTMLProxy.prototype = {
                         var pageContent = iconv.decode(body, responseCharset);
                         // 替换相应区块的 html 片段
                         var replacedHTML = self.replaceDom(pageContent, replacements);
-                        // html 美化，转回响应头指定的编码
-                        var encodedHTML = iconv.encode(beautify_html(replacedHTML), responseCharset);
+                        // 转回响应头指定的编码
+                        var encodedHTML = iconv.encode(replacedHTML, responseCharset);
                         // 响应到浏览器
                         res.end(encodedHTML);
 
@@ -144,7 +143,6 @@ HTMLProxy.prototype = {
             if (mock.checkDef(fileContentStr)) {
                 var pageParam = mock.getMockData(fileContentStr);
                 fileContentStr = Juicer(fileContentStr, pageParam);
-                fileContentStr = beautify_html(fileContentStr);
             }
 
             $(item.selector).html(fileContentStr);
