@@ -174,7 +174,7 @@ HTMLProxy.prototype = {
                 config.host = 'localhost';
                 config.path += ((config.path.indexOf('?') > 0) ? '&' : '?') + 'reqUrl=' + encodeURIComponent(reqUrl);
                 config.port = htmlProxyPort;
-                self.matchUrl[reqUrl] = idx;
+                self.matchUrl[decodeURIComponent(reqUrl)] = idx;
 
                 // 拷贝请求头
                 var reqHeaders = request.headers,

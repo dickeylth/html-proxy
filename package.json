@@ -1,6 +1,6 @@
 {
   "name": "html-proxy",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "html proxy for flexcombo",
   "main": "index.js",
   "scripts": {
