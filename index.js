@@ -95,6 +95,12 @@ HTMLProxy.prototype = {
                                 responseCharset = charsetMatch[0].split('=')[1];
                             }
 
+	                        // iconv-lite 不支持 gb2312，https://www.npmjs.org/package/iconv-lite#readme
+	                        if(responseCharset.toUpperCase() == 'GB2312'){
+								// 兼容为 GBK 处理
+		                        responseCharset = 'GBK';
+	                        }
+
                         }
 
                         // 获取替换关系

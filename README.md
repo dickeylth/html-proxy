@@ -67,6 +67,7 @@
 
 ### History
 
+- [0.0.8] [iconv-lite](https://www.npmjs.org/package/iconv-lite#readme) 不支持 GB2312，兼容为 GBK 处理
 - [0.0.7] fix 包含中文 url 导致 matchIdx 为 `undefined`
 - [0.0.6] 移除不太好用的 js-beautify 的格式化 html 功能
 - [0.0.5] Bugfix
